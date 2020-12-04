@@ -1,0 +1,207 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Petstore server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters."
+  version: "1.0.0"
+  title: "Swagger Prueba"
+  
+  contact:
+    email: "john.alex3000@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8081"
+basePath: "/prueba"
+tags:
+- name: "pruebausuarios"
+  description: "Lista y registra usuarios"
+- name: "pruebamodulos"
+  description: "Lista y registra modulos"
+schemes:
+- "http"
+paths:
+  /usuario:
+    post:
+      tags:
+      - "pruebausuarios"
+      summary: "Crea un nuevo usuario"
+      description: "Registra la informacion de un usuario para registrarlo en el sistema"
+      operationId: "registrarUsuario"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "datosUsuario"
+        description: "Todos los datos personales para realizar el registro del usuario"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "405":
+          description: "Invalid input"
+    put:
+      tags:
+      - "pruebausuarios"
+      summary: "Actualiza un usuario"
+      description: "Actualiza los datos persnales del usuario"
+      operationId: "actualizarUsuario"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "datosActualizarUsuario"
+        description: "Todos los datos a actualizar"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "400":
+          description: "Id invalido"
+        "404":
+          description: "usuario no encontrado"
+        "405":
+          description: "error"
+  /usuario/listarPorEstado:
+    get:
+      tags:
+      - "pruebausuarios"
+      summary: "Buscar todos los usuarios por estado"
+      description: "Trae todos los usuarios registrados en la base de datos por estado"
+      operationId: "listarUsuariosEstado"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Estado"
+        in: "query"
+        description: "Estado del usuario en el sistema"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+          enum:
+          - "Activo"
+          - "Inactivo"
+          - "Vacaciones"
+          default: "Activo"
+        collectionFormat: "multi"
+      responses:
+        "200":
+          description: "Lista de usuarios"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        "400":
+          description: "Estado no valido"
+  /modulo:
+    post:
+      tags:
+      - "pruebamodulos"
+      summary: "Crea un nuevo modulo"
+      description: "Registra la informacion de un modulo para registrarlo en el sistema"
+      operationId: "registrarModulo"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "datosModulo"
+        description: "Todos los datos del modulo para realizar el registro del mismo"
+        required: true
+        schema:
+          $ref: "#/definitions/Module"
+      responses:
+        "405":
+          description: "Invalid input"
+    put:
+      tags:
+      - "pruebamodulos"
+      summary: "Actualiza un modulo"
+      description: "Actualiza los datos del modulo"
+      operationId: "actualizarModulo"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "datosActualizarModulo"
+        description: "Todos los datos a actualizar"
+        required: true
+        schema:
+          $ref: "#/definitions/Module"
+      responses:
+        "400":
+          description: "Id invalido"
+        "404":
+          description: "modulo no encontrado"
+        "405":
+          description: "error"
+  /modulo/listarPorEstado:
+    get:
+      tags:
+      - "pruebamodulos"
+      summary: "Buscar todos los modulos por estado"
+      description: "Trae todos los modulos registrados en la base de datos por estado"
+      operationId: "listar-ModulosEstado"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Estado"
+        in: "query"
+        description: "Estado del modulo en el sistema"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+          enum:
+          - "Activo"
+          - "Inactivo"
+          default: "Activo"
+        collectionFormat: "multi"
+      responses:
+        "200":
+          description: "Lista de modulos"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Module"
+        "400":
+          description: "Estado no valido"
+definitions:
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+      phone:
+        type: "string"
+      userStatus:
+        type: "string"
+        description: "Estado del usuario"
+  Module:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      modulename:
+        type: "string"
+      moduleStatus:
+        type: "string"
+        description: "Estado del modulo"
